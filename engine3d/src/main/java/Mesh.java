@@ -1,4 +1,6 @@
 import javax.imageio.ImageIO;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +13,7 @@ import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
 
 public class Mesh {
     private float[] vertices;
+    private int[] vertIndicies;
     private float[] uvCoords;
     private int[] texture;
     private int textureWidth;
@@ -21,18 +24,17 @@ public class Mesh {
     public int textureID;
 
     Mesh() {
-
         vertices = new float[]{
-                -1.0f,-1.0f,-1.0f, // triangle 1 : begin
+                -1.0f,-1.0f,-1.0f, // left bottom #4
                 -1.0f,-1.0f, 1.0f,
-                -1.0f, 1.0f, 1.0f, // triangle 1 : end
-                1.0f, 1.0f,-1.0f, // triangle 2 : begin
+                -1.0f, 1.0f, 1.0f,
+                1.0f, 1.0f,-1.0f, // back top
                 -1.0f,-1.0f,-1.0f,
-                -1.0f, 1.0f,-1.0f, // triangle 2 : end
-                1.0f,-1.0f, 1.0f,
+                -1.0f, 1.0f,-1.0f,
+                1.0f,-1.0f, 1.0f, // bottom back
                 -1.0f,-1.0f,-1.0f,
                 1.0f,-1.0f,-1.0f,
-                1.0f, 1.0f,-1.0f,
+                1.0f, 1.0f,-1.0f, //
                 1.0f,-1.0f,-1.0f,
                 -1.0f,-1.0f,-1.0f,
                 -1.0f,-1.0f,-1.0f,
@@ -41,7 +43,7 @@ public class Mesh {
                 1.0f,-1.0f, 1.0f,
                 -1.0f,-1.0f, 1.0f,
                 -1.0f,-1.0f,-1.0f,
-                -1.0f, 1.0f, 1.0f,
+                -1.0f, 1.0f, 1.0f, // front bottom
                 -1.0f,-1.0f, 1.0f,
                 1.0f,-1.0f, 1.0f,
                 1.0f, 1.0f, 1.0f,
@@ -100,18 +102,24 @@ public class Mesh {
                 0.667979f, 1.0f-0.335851f
         };
 
-        File textureFile = new File("red.bmp");
+        File textureFile = new File("texture.png");
         BufferedImage textureBuffer;
         try {
             textureBuffer = ImageIO.read(textureFile);
             textureWidth = textureBuffer.getWidth();
             textureHeight = textureBuffer.getHeight();
+
+            AffineTransform rot90Transform = new AffineTransform();
+            rot90Transform.rotate(Math.PI/2, textureWidth/2, textureHeight/2);
+            AffineTransformOp rot90Op = new AffineTransformOp(rot90Transform, AffineTransformOp.TYPE_BILINEAR);
+            textureBuffer = rot90Op.filter(textureBuffer, null);
+
             texture = new int[textureBuffer.getWidth()*textureBuffer.getHeight()];
             textureBuffer.getRGB(0, 0,
                                 textureWidth, textureHeight,
                                     texture,0, textureWidth);
 
-            for (int i = 0; i < texture.length; i++) {
+            for (int i = 0; i < texture.length; i++) { // convert from ARGB to RGB by removing A
                 texture[i] <<= 8;
             }
 

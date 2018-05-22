@@ -18,7 +18,7 @@ class GameEngine {
     }
 
     public void run() {
-        //System.loadLibrary("renderdoc"); // extra debugging software library for windows
+        System.loadLibrary("renderdoc"); // extra debugging software library for windows
         graphicsSystem.init();
 
         //drawables must be initalized after graphics system is initialized
