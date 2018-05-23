@@ -15,13 +15,15 @@ public class Cube implements Drawable {
     private Matrix4x4 position;
 
     Cube() {
-        playerMesh = new Mesh();
+        playerMesh = new Mesh(2);
         position = Matrix4x4.translation(new Vector3(0f,0f,0));
     }
 
     public void draw(Matrix4x4 vp) {
         glUseProgram(shaderID);
 
+        //Quaternion rotation = new Quaternion(new Vector3(1.0f, 0.0f, 0.0f), 45);
+        //Matrix4x4 mvp = Matrix4x4.scale(new Vector3(0.5f, 0.5f, 1)).times(rotation.rotationMatrix);
         Matrix4x4 mvp = Matrix4x4.scale(new Vector3(0.5f, 0.5f, 1));
         //Matrix4x4 mvp = position.times(vp);
         glUniformMatrix4fv(mvpID,true, mvp.matrix);

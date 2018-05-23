@@ -23,84 +23,110 @@ public class Mesh {
     public int uvBufferID;
     public int textureID;
 
-    Mesh() {
-        vertices = new float[]{
-                -1.0f,-1.0f,-1.0f, // left bottom #4
-                -1.0f,-1.0f, 1.0f,
-                -1.0f, 1.0f, 1.0f,
-                1.0f, 1.0f,-1.0f, // back top
-                -1.0f,-1.0f,-1.0f,
-                -1.0f, 1.0f,-1.0f,
-                1.0f,-1.0f, 1.0f, // bottom back
-                -1.0f,-1.0f,-1.0f,
-                1.0f,-1.0f,-1.0f,
-                1.0f, 1.0f,-1.0f, //
-                1.0f,-1.0f,-1.0f,
-                -1.0f,-1.0f,-1.0f,
-                -1.0f,-1.0f,-1.0f,
-                -1.0f, 1.0f, 1.0f,
-                -1.0f, 1.0f,-1.0f,
-                1.0f,-1.0f, 1.0f,
-                -1.0f,-1.0f, 1.0f,
-                -1.0f,-1.0f,-1.0f,
-                -1.0f, 1.0f, 1.0f, // front bottom
-                -1.0f,-1.0f, 1.0f,
-                1.0f,-1.0f, 1.0f,
-                1.0f, 1.0f, 1.0f,
-                1.0f,-1.0f,-1.0f,
-                1.0f, 1.0f,-1.0f,
-                1.0f,-1.0f,-1.0f,
-                1.0f, 1.0f, 1.0f,
-                1.0f,-1.0f, 1.0f,
-                1.0f, 1.0f, 1.0f,
-                1.0f, 1.0f,-1.0f,
-                -1.0f, 1.0f,-1.0f,
-                1.0f, 1.0f, 1.0f,
-                -1.0f, 1.0f,-1.0f,
-                -1.0f, 1.0f, 1.0f,
-                1.0f, 1.0f, 1.0f,
-                -1.0f, 1.0f, 1.0f,
-                1.0f,-1.0f, 1.0f
-        };
+    Mesh(int type) {
+        switch (type) {
+            case 1:
+                vertices = new float[]{
+                        // triangle 1: top left
+                        -1.0f, -1.0f, 0.0f,
+                        -1.0f, 1.0f, 0.0f,
+                        1.0f, 1.0f, 0.0f,
+                        // triangle 2: bottom right
+                        -1.0f, -1.0f, 0.0f,
+                        1.0f, -1.0f, 0.0f,
+                        1.0f, 1.0f, 0.0f
+                };
 
-        uvCoords = new float[]{
-                0.000059f, 1.0f-0.000004f,
-                0.000103f, 1.0f-0.336048f,
-                0.335973f, 1.0f-0.335903f,
-                1.000023f, 1.0f-0.000013f,
-                0.667979f, 1.0f-0.335851f,
-                0.999958f, 1.0f-0.336064f,
-                0.667979f, 1.0f-0.335851f,
-                0.336024f, 1.0f-0.671877f,
-                0.667969f, 1.0f-0.671889f,
-                1.000023f, 1.0f-0.000013f,
-                0.668104f, 1.0f-0.000013f,
-                0.667979f, 1.0f-0.335851f,
-                0.000059f, 1.0f-0.000004f,
-                0.335973f, 1.0f-0.335903f,
-                0.336098f, 1.0f-0.000071f,
-                0.667979f, 1.0f-0.335851f,
-                0.335973f, 1.0f-0.335903f,
-                0.336024f, 1.0f-0.671877f,
-                1.000004f, 1.0f-0.671847f,
-                0.999958f, 1.0f-0.336064f,
-                0.667979f, 1.0f-0.335851f,
-                0.668104f, 1.0f-0.000013f,
-                0.335973f, 1.0f-0.335903f,
-                0.667979f, 1.0f-0.335851f,
-                0.335973f, 1.0f-0.335903f,
-                0.668104f, 1.0f-0.000013f,
-                0.336098f, 1.0f-0.000071f,
-                0.000103f, 1.0f-0.336048f,
-                0.000004f, 1.0f-0.671870f,
-                0.336024f, 1.0f-0.671877f,
-                0.000103f, 1.0f-0.336048f,
-                0.336024f, 1.0f-0.671877f,
-                0.335973f, 1.0f-0.335903f,
-                0.667969f, 1.0f-0.671889f,
-                1.000004f, 1.0f-0.671847f,
-                0.667979f, 1.0f-0.335851f
-        };
+                uvCoords = new float[]{
+                        // triangle 1: top left
+                        0.0f, 0.0f,
+                        0.0f, 1.0f,
+                        1.0f, 1.0f,
+                        // triangle 2: bottom right
+                        0.0f, 0.0f,
+                        1.0f, 0.0f,
+                        1.0f, 1.0f
+                };
+                break;
+            case 2:
+                vertices = new float[]{
+                        -1.0f, -1.0f, -1.0f, // left bottom #4
+                        -1.0f, -1.0f, 1.0f,
+                        -1.0f, 1.0f, 1.0f,
+                        1.0f, 1.0f, -1.0f, // back top
+                        -1.0f, -1.0f, -1.0f,
+                        -1.0f, 1.0f, -1.0f,
+                        1.0f, -1.0f, 1.0f, // bottom back
+                        -1.0f, -1.0f, -1.0f,
+                        1.0f, -1.0f, -1.0f,
+                        1.0f, 1.0f, -1.0f, //
+                        1.0f, -1.0f, -1.0f,
+                        -1.0f, -1.0f, -1.0f,
+                        -1.0f, -1.0f, -1.0f,
+                        -1.0f, 1.0f, 1.0f,
+                        -1.0f, 1.0f, -1.0f,
+                        1.0f, -1.0f, 1.0f,
+                        -1.0f, -1.0f, 1.0f,
+                        -1.0f, -1.0f, -1.0f,
+                        -1.0f, 1.0f, 1.0f, // front bottom
+                        -1.0f, -1.0f, 1.0f,
+                        1.0f, -1.0f, 1.0f,
+                        1.0f, 1.0f, 1.0f,
+                        1.0f, -1.0f, -1.0f,
+                        1.0f, 1.0f, -1.0f,
+                        1.0f, -1.0f, -1.0f,
+                        1.0f, 1.0f, 1.0f,
+                        1.0f, -1.0f, 1.0f,
+                        1.0f, 1.0f, 1.0f,
+                        1.0f, 1.0f, -1.0f,
+                        -1.0f, 1.0f, -1.0f,
+                        1.0f, 1.0f, 1.0f,
+                        -1.0f, 1.0f, -1.0f,
+                        -1.0f, 1.0f, 1.0f,
+                        1.0f, 1.0f, 1.0f,
+                        -1.0f, 1.0f, 1.0f,
+                        1.0f, -1.0f, 1.0f
+                };
+
+                uvCoords = new float[]{
+                        0.000059f, 1.0f - 0.000004f,
+                        0.000103f, 1.0f - 0.336048f,
+                        0.335973f, 1.0f - 0.335903f,
+                        1.000023f, 1.0f - 0.000013f,
+                        0.667979f, 1.0f - 0.335851f,
+                        0.999958f, 1.0f - 0.336064f,
+                        0.667979f, 1.0f - 0.335851f,
+                        0.336024f, 1.0f - 0.671877f,
+                        0.667969f, 1.0f - 0.671889f,
+                        1.000023f, 1.0f - 0.000013f,
+                        0.668104f, 1.0f - 0.000013f,
+                        0.667979f, 1.0f - 0.335851f,
+                        0.000059f, 1.0f - 0.000004f,
+                        0.335973f, 1.0f - 0.335903f,
+                        0.336098f, 1.0f - 0.000071f,
+                        0.667979f, 1.0f - 0.335851f,
+                        0.335973f, 1.0f - 0.335903f,
+                        0.336024f, 1.0f - 0.671877f,
+                        1.000004f, 1.0f - 0.671847f,
+                        0.999958f, 1.0f - 0.336064f,
+                        0.667979f, 1.0f - 0.335851f,
+                        0.668104f, 1.0f - 0.000013f,
+                        0.335973f, 1.0f - 0.335903f,
+                        0.667979f, 1.0f - 0.335851f,
+                        0.335973f, 1.0f - 0.335903f,
+                        0.668104f, 1.0f - 0.000013f,
+                        0.336098f, 1.0f - 0.000071f,
+                        0.000103f, 1.0f - 0.336048f,
+                        0.000004f, 1.0f - 0.671870f,
+                        0.336024f, 1.0f - 0.671877f,
+                        0.000103f, 1.0f - 0.336048f,
+                        0.336024f, 1.0f - 0.671877f,
+                        0.335973f, 1.0f - 0.335903f,
+                        0.667969f, 1.0f - 0.671889f,
+                        1.000004f, 1.0f - 0.671847f,
+                        0.667979f, 1.0f - 0.335851f
+                };
+        }
 
         File textureFile = new File("texture.png");
         BufferedImage textureBuffer;
@@ -108,24 +134,32 @@ public class Mesh {
             textureBuffer = ImageIO.read(textureFile);
             textureWidth = textureBuffer.getWidth();
             textureHeight = textureBuffer.getHeight();
-
-            AffineTransform rot90Transform = new AffineTransform();
-            rot90Transform.rotate(Math.PI/2, textureWidth/2, textureHeight/2);
-            AffineTransformOp rot90Op = new AffineTransformOp(rot90Transform, AffineTransformOp.TYPE_BILINEAR);
-            textureBuffer = rot90Op.filter(textureBuffer, null);
+            if ((textureWidth % 2 != 0) && (textureHeight % 2 != 0)) {
+                throw new Exception();
+            }
 
             texture = new int[textureBuffer.getWidth()*textureBuffer.getHeight()];
             textureBuffer.getRGB(0, 0,
                                 textureWidth, textureHeight,
                                     texture,0, textureWidth);
-
-            for (int i = 0; i < texture.length; i++) { // convert from ARGB to RGB by removing A
-                texture[i] <<= 8;
+            // mirror image horizontally and bitshift to convert from ARGB to RGB
+            for (int r = 0; r < textureHeight/2; r++) {
+                for (int c = 0; c < textureWidth; c++) {
+                    int topIndex = r*textureWidth + c;
+                    int bottomIndex = (textureHeight - r - 1)*textureWidth + c;
+                    int temp = texture[topIndex];
+                    texture[topIndex] = texture[bottomIndex];
+                    texture[bottomIndex] = temp;
+                    texture[topIndex] <<= 8;
+                    texture[bottomIndex] <<= 8;
+                }
             }
 
         } catch (IOException ex) {
             ex.printStackTrace();
             GameEngine.errorExit("Mesh: triangle.bmp could not be found");
+        } catch (Exception e) {
+            GameEngine.errorExit("Mesh: image is not even in width and height");
         }
 
     }
