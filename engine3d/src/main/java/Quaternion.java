@@ -14,7 +14,7 @@ public class Quaternion {
     Matrix4x4 rotationMatrix;
 
     Quaternion(Vector3 axisInit, float angleInit) {
-        axis = axisInit;
+        axis = axisInit.normalized();
         angle = (float)((angleInit)*(Math.PI/180));
         x = (float)(axis.x * Math.sin(angle/2));
         y = (float)(axis.y * Math.sin(angle/2));
@@ -22,21 +22,18 @@ public class Quaternion {
         w = (float)(Math.cos(angle/2));
 
         rotationMatrix = new Matrix4x4();
-        float s = (float) Math.sqrt(x*x+y*y+z*z+w*w);
-        s = 1/(s*s);
+        // using http://www.mrelusive.com/publications/papers/SIMD-From-Quaternion-to-Matrix-and-Back.pdf
+        rotationMatrix.matrix[0] = 1-2*(y*y+z*z);
+        rotationMatrix.matrix[1] = 2*(x*y+z*w);
+        rotationMatrix.matrix[2] = 2*(x*z-y*w);
 
-        // using https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation
-        rotationMatrix.matrix[0] = 1-2*s*(y*y+z*z);
-        rotationMatrix.matrix[1] = 2*s*(x*y-z*w);
-        rotationMatrix.matrix[2] = 2*s*(x*z+y*w);
+        rotationMatrix.matrix[4] = 2*(x*y-z*w);
+        rotationMatrix.matrix[5] = 1-2*(x*x+z*z);
+        rotationMatrix.matrix[6] = 2*(y*z+x*w);
 
-        rotationMatrix.matrix[4] = 2*s*(x*y+z*w);
-        rotationMatrix.matrix[5] = 1-2*s*(x*x+z*z);
-        rotationMatrix.matrix[6] = 2*s*(y*z-x*w);
-
-        rotationMatrix.matrix[8] = 2*s*(x*z-y*w);
-        rotationMatrix.matrix[9] = 2*s*(y*z+x*w);
-        rotationMatrix.matrix[10] = 1-2*s*(x*x+y*y);
+        rotationMatrix.matrix[8] = 2*(x*z+y*w);
+        rotationMatrix.matrix[9] = 2*(y*z-x*w);
+        rotationMatrix.matrix[10] = 1-2*(x*x+y*y);
 
         rotationMatrix.matrix[15] = 1;
     }

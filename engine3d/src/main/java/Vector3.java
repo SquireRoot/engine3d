@@ -14,4 +14,13 @@ public class Vector3 {
         y = inity;
         z = initz;
     }
+
+    public Vector3 normalized() {
+        float magnitude = (float)Math.sqrt(x*x+y*y+z*z);
+        Vector3 out = new Vector3();
+        out.x = x/magnitude;
+        out.y = y/magnitude;
+        out.z = z/magnitude;
+        return out;
+    }
 }

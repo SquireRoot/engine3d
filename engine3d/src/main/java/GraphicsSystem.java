@@ -13,9 +13,12 @@ public class GraphicsSystem {
     final private int SAMPLING = 4;
     public long window;
 
+    final int windowWidth = 1280;
+    final int windowHeight = 720;
+
     private Matrix4x4 projection;
     private Matrix4x4 view;
-    private Matrix4x4 vp;
+    private Matrix4x4 pv;
 
     public void init() {
         if (!glfwInit())
@@ -24,7 +27,7 @@ public class GraphicsSystem {
         glfwWindowHint(GLFW_SAMPLES, SAMPLING); // multisampling
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
-        window = glfwCreateWindow(1280, 720, "Hello World!", NULL, NULL);
+        window = glfwCreateWindow(windowWidth, windowHeight, "Hello World!", NULL, NULL);
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
@@ -37,14 +40,14 @@ public class GraphicsSystem {
         glDepthFunc(GL_LESS);
         glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
-        projection = Matrix4x4.getOrtho(10,10,0, -10);
+        projection = Matrix4x4.getOrtho(windowWidth/100,windowHeight/100,-0.01f, -10);
         view = new Matrix4x4(1);
-        vp = view.times(projection);
+        pv = projection.times(view);
     }
 
     public void draw(Drawable object) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        object.draw(vp);
+        object.draw(pv);
         glfwSwapBuffers(window);
     }
 

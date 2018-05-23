@@ -1,4 +1,4 @@
 public interface Drawable {
-    void draw(Matrix4x4 vp);
+    void draw(Matrix4x4 pv);
     void load();
 }
