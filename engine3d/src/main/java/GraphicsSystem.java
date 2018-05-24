@@ -15,6 +15,7 @@ public class GraphicsSystem {
 
     final int windowWidth = 1280;
     final int windowHeight = 720;
+    final float aspectRatio = ((float)(windowWidth))/((float)(windowHeight));
 
     private Matrix4x4 projection;
     private Matrix4x4 view;
@@ -40,7 +41,7 @@ public class GraphicsSystem {
         glDepthFunc(GL_LESS);
         glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
-        projection = Matrix4x4.getOrtho(windowWidth/100,windowHeight/100,-0.01f, -10);
+        projection = Matrix4x4.getProjection(45,aspectRatio,0.1f, 100.0f);
         view = new Matrix4x4(1);
         pv = projection.times(view);
     }

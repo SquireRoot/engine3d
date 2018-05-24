@@ -7,10 +7,6 @@ public class Quaternion {
     Vector3 axis;
     float angle;
 
-    // 0  1  2  3
-    // 4  5  6  7
-    // 8  9  10 11
-    // 12 13 14 15
     Matrix4x4 rotationMatrix;
 
     Quaternion(Vector3 axisInit, float angleInit) {
@@ -22,7 +18,7 @@ public class Quaternion {
         w = (float)(Math.cos(angle/2));
 
         rotationMatrix = new Matrix4x4();
-        // using http://www.mrelusive.com/publications/papers/SIMD-From-Quaternion-to-Matrix-and-Back.pdf
+
         rotationMatrix.matrix[0] = 1-2*(y*y+z*z);
         rotationMatrix.matrix[1] = 2*(x*y+z*w);
         rotationMatrix.matrix[2] = 2*(x*z-y*w);

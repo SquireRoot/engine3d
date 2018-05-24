@@ -17,23 +17,31 @@ public class Cube implements Drawable {
     private Quaternion rotation;
     private Matrix4x4 mvp;
 
-    private int count;
+    private float count;
 
     Cube() {
         playerMesh = new Mesh(2);
-        position = Matrix4x4.translation(new Vector3(0f, 0f, 5));
-        rotation = new Quaternion(new Vector3(1.0f, 1.0f, 0.0f), 0);
-        scale =  Matrix4x4.scale(new Vector3(1f, 1f, 1f));
+        position = Matrix4x4.translation(new Vector3(0.0f, 0.0f, -10.0f));
+        rotation = new Quaternion(new Vector3(1.0f, 1.0f, 0.0f), 0.0f);
+        scale =  Matrix4x4.scale(new Vector3(0.75f, 0.75f, 0.75f));
         count = 0;
     }
 
     public void draw(Matrix4x4 pv) {
         glUseProgram(shaderID);
 
-        rotation = new Quaternion(new Vector3(1.0f, 1.0f, 0.0f), count/2);
+        // cool animation stuff
+        rotation = new Quaternion(new Vector3(1.0f, 0.0f, 0.0f),
+                                            (float)(45*Math.cos(count/60)));
+        Quaternion rotation2 = new Quaternion(new Vector3(0.0f, 1.0f, 0.0f),
+                                            (float)(45*Math.sin(count/60)));
+        scale =  Matrix4x4.scale(new Vector3(1.5f+(float)(0.5*Math.cos(count/60)),
+                                            1.5f+(float)(0.5*Math.cos(count/60)),
+                                            1.5f+(float)(0.5*Math.cos(count/60))));
+
         count++;
 
-        mvp = pv.times(position).times(rotation.rotationMatrix).times(scale);
+        mvp = pv.times(position).times(rotation.rotationMatrix.times(rotation2.rotationMatrix)).times(scale);
         glUniformMatrix4fv(mvpID,true, mvp.matrix);
 
         glActiveTexture(GL_TEXTURE0);
