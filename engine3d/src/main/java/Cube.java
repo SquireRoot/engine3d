@@ -21,9 +21,9 @@ public class Cube implements Drawable {
 
     Cube() {
         playerMesh = new Mesh(2);
-        position = Matrix4x4.translation(new Vector3(0.0f, 0.0f, -10.0f));
-        rotation = new Quaternion(new Vector3(1.0f, 1.0f, 0.0f), 0.0f);
-        scale =  Matrix4x4.scale(new Vector3(0.75f, 0.75f, 0.75f));
+        position = Matrix4x4.translation(new Vector3(0.0f, 0.0f, -5.0f));
+        rotation = new Quaternion(new Vector3(0.0f, 0.0f, 1.0f), 0);
+        scale =  Matrix4x4.scale(new Vector3(0.25f, 0.25f, 0.25f));
         count = 0;
     }
 
@@ -31,17 +31,14 @@ public class Cube implements Drawable {
         glUseProgram(shaderID);
 
         // cool animation stuff
-        rotation = new Quaternion(new Vector3(1.0f, 0.0f, 0.0f),
-                                            (float)(45*Math.cos(count/60)));
-        Quaternion rotation2 = new Quaternion(new Vector3(0.0f, 1.0f, 0.0f),
-                                            (float)(45*Math.sin(count/60)));
-        scale =  Matrix4x4.scale(new Vector3(1.5f+(float)(0.5*Math.cos(count/60)),
-                                            1.5f+(float)(0.5*Math.cos(count/60)),
-                                            1.5f+(float)(0.5*Math.cos(count/60))));
+//        rotation = new Quaternion(new Vector3(1.0f, 0.0f, 0.0f),
+//                                            (float)((Math.PI/4)*Math.cos(count/40)));
+//        scale =  Matrix4x4.scale(new Vector3(1.0f+(float)(0.3*Math.cos(count/60)),
+//                                            1.0f+(float)(0.3*Math.cos(count/60)),
+//                                            1.0f+(float)(0.3*Math.cos(count/60))));
+//        count++;
 
-        count++;
-
-        mvp = pv.times(position).times(rotation.rotationMatrix.times(rotation2.rotationMatrix)).times(scale);
+        mvp = pv.times(position).times(rotation.rotationMatrix).times(scale);
         glUniformMatrix4fv(mvpID,true, mvp.matrix);
 
         glActiveTexture(GL_TEXTURE0);

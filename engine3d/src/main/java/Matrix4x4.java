@@ -113,4 +113,21 @@ public class Matrix4x4 {
         out.matrix[10] = vec.z;
         return out;
     }
+
+    public static Matrix4x4 getView(Vector3 position, Vector3 orientation) {
+        Vector3 initOrientation = new Vector3(0.0f, 0.0f, -1.0f);
+        Vector3 xzOrientation = new Vector3();
+        xzOrientation.x = orientation.x;
+        xzOrientation.z = orientation.z;
+        Vector3 rotationAxis = initOrientation.cross(xzOrientation);
+        float angleTheta = (float)(Math.acos((initOrientation.normalized()).dot(xzOrientation.normalized())));
+        Quaternion yRotation = new Quaternion(rotationAxis, -angleTheta);
+
+        rotationAxis = xzOrientation.cross(orientation);
+        float anglePhi = (float)(Math.acos((xzOrientation.normalized()).dot(orientation.normalized())));
+        Quaternion xRotation = new Quaternion(rotationAxis, -anglePhi);
+        Matrix4x4 out = (yRotation.rotationMatrix).times(xRotation.rotationMatrix);
+        out = translation(position.negative()).times(out);
+        return out;
+    }
 }

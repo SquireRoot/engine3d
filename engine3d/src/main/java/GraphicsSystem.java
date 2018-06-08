@@ -1,7 +1,6 @@
 import org.lwjgl.opengl.GL;
 
 import java.io.*;
-
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
@@ -41,7 +40,8 @@ public class GraphicsSystem {
         glDepthFunc(GL_LESS);
         glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
-        projection = Matrix4x4.getProjection(45,aspectRatio,0.1f, 100.0f);
+        projection = Matrix4x4.getProjection(45, aspectRatio,0.1f, 100.0f);
+        view = Matrix4x4.getView(new Vector3(0.0f, 0.0f, 0.0f), new Vector3(-1, -1, -1));
         view = new Matrix4x4(1);
         pv = projection.times(view);
     }
