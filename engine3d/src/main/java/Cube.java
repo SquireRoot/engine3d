@@ -31,12 +31,12 @@ public class Cube implements Drawable {
         glUseProgram(shaderID);
 
         // cool animation stuff
-//        rotation = new Quaternion(new Vector3(1.0f, 0.0f, 0.0f),
-//                                            (float)((Math.PI/4)*Math.cos(count/40)));
-//        scale =  Matrix4x4.scale(new Vector3(1.0f+(float)(0.3*Math.cos(count/60)),
-//                                            1.0f+(float)(0.3*Math.cos(count/60)),
-//                                            1.0f+(float)(0.3*Math.cos(count/60))));
-//        count++;
+        rotation = new Quaternion(new Vector3(1.0f, 0.0f, 0.0f),
+                                            (float)((Math.PI/4)*Math.cos(count/40)));
+        scale =  Matrix4x4.scale(new Vector3(1.0f+(float)(0.3*Math.cos(count/60)),
+                                            1.0f+(float)(0.3*Math.cos(count/60)),
+                                            1.0f+(float)(0.3*Math.cos(count/60))));
+        count++;
 
         mvp = pv.times(position).times(rotation.rotationMatrix).times(scale);
         glUniformMatrix4fv(mvpID,true, mvp.matrix);
