@@ -49,4 +49,34 @@ public class Vector3 {
         out.z = -z;
         return out;
     }
+
+    public Vector3 plus(Vector3 in) {
+        Vector3 out = new Vector3();
+        out.x = x + in.x;
+        out.y = y + in.y;
+        out.z = z + in.z;
+        return out;
+    }
+
+    public Vector3 times(float in) {
+        Vector3 out = new Vector3();
+        out.x = x * in;
+        out.y = y * in;
+        out.z = z * in;
+        return out;
+    }
+
+    public void plusEquals(Vector3 in) {
+        x += in.x;
+        y += in.y;
+        z += in.z;
+    }
+
+    public Vector3 minus(Vector3 in) {
+        Vector3 out = new Vector3();
+        out.x = x - in.x;
+        out.y = y - in.y;
+        out.z = z - in.z;
+        return out;
+    }
 }

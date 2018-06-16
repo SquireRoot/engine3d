@@ -1,7 +1,5 @@
 import java.io.*;
-
-import static org.lwjgl.glfw.GLFW.glfwPollEvents;
-import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
+import static org.lwjgl.glfw.GLFW.*;
 
 class GameEngine {
     private GameState state;
@@ -37,6 +35,7 @@ class GameEngine {
 
             //int framecount = 0;
             while (accumulator >= OPTIMAL_DT && !glfwWindowShouldClose(graphicsSystem.window)) {
+                graphicsSystem.update();
                 graphicsSystem.draw(testCube);
                 glfwPollEvents();
 

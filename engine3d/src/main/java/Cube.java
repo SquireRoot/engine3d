@@ -12,8 +12,8 @@ public class Cube implements Drawable {
     private int samplerID;
     private int mvpID;
 
-    private Matrix4x4 position;
-    private Matrix4x4 scale;
+    private Vector3 position;
+    private Vector3 scale;
     private Quaternion rotation;
     private Matrix4x4 mvp;
 
@@ -21,24 +21,29 @@ public class Cube implements Drawable {
 
     Cube() {
         playerMesh = new Mesh(2);
-        position = Matrix4x4.translation(new Vector3(0.0f, 0.0f, -5.0f));
+        position = new Vector3(0.0f, 0.0f, -5.0f);
         rotation = new Quaternion(new Vector3(0.0f, 0.0f, 1.0f), 0);
-        scale =  Matrix4x4.scale(new Vector3(0.25f, 0.25f, 0.25f));
+        scale =  new Vector3(0.25f, 0.25f, 0.25f);
         count = 0;
     }
 
-    public void draw(Matrix4x4 pv) {
+    public void draw() {
         glUseProgram(shaderID);
 
         // cool animation stuff
-        rotation = new Quaternion(new Vector3(1.0f, 0.0f, 0.0f),
-                                            (float)((Math.PI/4)*Math.cos(count/40)));
-        scale =  Matrix4x4.scale(new Vector3(1.0f+(float)(0.3*Math.cos(count/60)),
-                                            1.0f+(float)(0.3*Math.cos(count/60)),
-                                            1.0f+(float)(0.3*Math.cos(count/60))));
-        count++;
+//        rotation = new Quaternion(new Vector3(1.0f, 0.0f, 0.0f),
+//                                            (float)((Math.PI/4)*Math.cos(count/40)));
+//        scale =  Matrix4x4.scale(new Vector3(1.0f+(float)(0.3*Math.cos(count/60)),
+//                                            1.0f+(float)(0.3*Math.cos(count/60)),
+//                                            1.0f+(float)(0.3*Math.cos(count/60))));
+//        count++;
 
-        mvp = pv.times(position).times(rotation.rotationMatrix).times(scale);
+        mvp = (GraphicsSystem.projection)
+                .times(GraphicsSystem.view)
+                .times(Matrix4x4.translation(position))
+                .times(rotation.rotationMatrix)
+                .times(Matrix4x4.scale(scale));
+
         glUniformMatrix4fv(mvpID,true, mvp.matrix);
 
         glActiveTexture(GL_TEXTURE0);

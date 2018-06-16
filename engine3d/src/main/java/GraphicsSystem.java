@@ -1,6 +1,6 @@
 import org.lwjgl.opengl.GL;
-
 import java.io.*;
+
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
@@ -10,15 +10,16 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class GraphicsSystem {
     final private int SAMPLING = 4;
-    public long window;
+    public static long window;
 
     final int windowWidth = 1280;
     final int windowHeight = 720;
     final float aspectRatio = ((float)(windowWidth))/((float)(windowHeight));
 
-    private Matrix4x4 projection;
-    private Matrix4x4 view;
-    private Matrix4x4 pv;
+    public static Matrix4x4 projection;
+    public static Matrix4x4 view;
+    private Vector3 camPosition;
+    private Vector3 camOrientation; // looking in the direction of this vector
 
     public void init() {
         if (!glfwInit())
@@ -40,15 +41,59 @@ public class GraphicsSystem {
         glDepthFunc(GL_LESS);
         glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
+        camPosition = new Vector3();
+        camOrientation = new Vector3(0,0,-1);
+        view = Matrix4x4.getView(camPosition, camOrientation);
         projection = Matrix4x4.getProjection(45, aspectRatio,0.1f, 100.0f);
-        view = Matrix4x4.getView(new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0, 0, -1));
-        pv = projection.times(view);
     }
 
     public void draw(Drawable object) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        object.draw(pv);
+        object.draw();
         glfwSwapBuffers(window);
+    }
+
+    public void update() {
+        Vector3 movementVec = new Vector3();
+
+        if (glfwGetKey(GraphicsSystem.window, GLFW_KEY_W) == GLFW_PRESS) {
+            Vector3 xz = new Vector3();
+            xz.x = camOrientation.x;
+            xz.z = camOrientation.z;
+            movementVec.plusEquals(xz.normalized().times(1/60f));
+        }
+
+        if (glfwGetKey(GraphicsSystem.window, GLFW_KEY_S) == GLFW_PRESS) {
+            Vector3 xz = new Vector3();
+            xz.x = camOrientation.x;
+            xz.z = camOrientation.z;
+            movementVec.plusEquals(xz.normalized().times(-1/60f));
+        }
+
+        if (glfwGetKey(GraphicsSystem.window, GLFW_KEY_D) == GLFW_PRESS) {
+            Vector3 xz = new Vector3();
+            xz.x = -camOrientation.z;
+            xz.z = camOrientation.x;
+            movementVec.plusEquals(xz.normalized().times(1/60f));
+        }
+
+        if (glfwGetKey(GraphicsSystem.window, GLFW_KEY_A) == GLFW_PRESS) {
+            Vector3 xz = new Vector3();
+            xz.x = -camOrientation.z;
+            xz.z = camOrientation.x;
+            movementVec.plusEquals(xz.normalized().times(-1/60f));
+        }
+
+        if (glfwGetKey(GraphicsSystem.window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+            movementVec.plusEquals(new Vector3(0,1/60f, 0));
+        }
+
+        if (glfwGetKey(GraphicsSystem.window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
+            movementVec.plusEquals(new Vector3(0,-1/60f, 0));
+        }
+
+        camPosition.plusEquals(movementVec);
+        view = Matrix4x4.getView(camPosition, camOrientation);
     }
 
     public void exit() {
