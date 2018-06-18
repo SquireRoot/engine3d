@@ -64,7 +64,7 @@ class GameEngine {
     private static boolean append = false;
     public static void writeLog(String inStr) {
         try {
-            FileWriter logFile = new FileWriter("log.txt", append);
+            FileWriter logFile = new FileWriter("engine3d.log", append);
             append = true;
             BufferedWriter logBuffer = new BufferedWriter(logFile);
             logBuffer.write(inStr);
@@ -77,7 +77,7 @@ class GameEngine {
 
     public static void writeLogLn(String inStr) {
         try {
-            FileWriter logFile = new FileWriter("log.txt", append);
+            FileWriter logFile = new FileWriter("engine3d.log", append);
             append = true;
             BufferedWriter logBuffer = new BufferedWriter(logFile);
             logBuffer.write(inStr + "\n");

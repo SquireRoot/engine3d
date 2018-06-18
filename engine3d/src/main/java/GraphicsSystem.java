@@ -19,7 +19,8 @@ public class GraphicsSystem {
     public static Matrix4x4 projection;
     public static Matrix4x4 view;
     private Vector3 camPosition;
-    private Vector3 camOrientation; // looking in the direction of this vector
+    private Quaternion camYRotation;
+    private Quaternion camXRotation;
 
     public void init() {
         if (!glfwInit())
@@ -42,8 +43,8 @@ public class GraphicsSystem {
         glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
         camPosition = new Vector3();
-        camOrientation = new Vector3(0,0,-1);
-        view = Matrix4x4.getView(camPosition, camOrientation);
+        camYRotation = new Quaternion(new Vector3(0, 1, 0), 0);
+        camXRotation = new Quaternion(new Vector3(1, 0, 0), 0);
         projection = Matrix4x4.getProjection(45, aspectRatio,0.1f, 100.0f);
     }
 
@@ -54,46 +55,64 @@ public class GraphicsSystem {
     }
 
     public void update() {
+        if (glfwGetKey(GraphicsSystem.window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+            camYRotation = new Quaternion(camYRotation.axis,
+                    (float)(camYRotation.angle - Math.PI/120));
+        }
+
+        if (glfwGetKey(GraphicsSystem.window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+            camYRotation = new Quaternion(camYRotation.axis,
+                    (float)(camYRotation.angle + Math.PI/120));
+        }
+
+        if (glfwGetKey(GraphicsSystem.window, GLFW_KEY_UP) == GLFW_PRESS) {
+            camXRotation = new Quaternion(camXRotation.axis,
+                    (float)(camXRotation.angle + Math.PI/120));
+        }
+
+        if (glfwGetKey(GraphicsSystem.window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+            camXRotation = new Quaternion(camXRotation.axis,
+                    (float)(camXRotation.angle - Math.PI/120));
+        }
+
+        if (glfwGetKey(GraphicsSystem.window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+            GameEngine.writeLogLn("break");
+        }
+
+        Vector3 forwards = new Vector3(0, 0, -1);
+        forwards = (camYRotation.rotationMatrix).times(forwards);
+        Vector3 right = new Vector3();
+        right.x = -forwards.z;
+        right.z = forwards.x;
+
         Vector3 movementVec = new Vector3();
 
         if (glfwGetKey(GraphicsSystem.window, GLFW_KEY_W) == GLFW_PRESS) {
-            Vector3 xz = new Vector3();
-            xz.x = camOrientation.x;
-            xz.z = camOrientation.z;
-            movementVec.plusEquals(xz.normalized().times(1/60f));
-        }
+            movementVec.plusEquals(forwards.normalized().times(1/60f)); }
 
         if (glfwGetKey(GraphicsSystem.window, GLFW_KEY_S) == GLFW_PRESS) {
-            Vector3 xz = new Vector3();
-            xz.x = camOrientation.x;
-            xz.z = camOrientation.z;
-            movementVec.plusEquals(xz.normalized().times(-1/60f));
-        }
+            movementVec.plusEquals(forwards.normalized().times(-1/60f)); }
 
         if (glfwGetKey(GraphicsSystem.window, GLFW_KEY_D) == GLFW_PRESS) {
-            Vector3 xz = new Vector3();
-            xz.x = -camOrientation.z;
-            xz.z = camOrientation.x;
-            movementVec.plusEquals(xz.normalized().times(1/60f));
-        }
+            movementVec.plusEquals(right.normalized().times(1/60f)); }
 
         if (glfwGetKey(GraphicsSystem.window, GLFW_KEY_A) == GLFW_PRESS) {
-            Vector3 xz = new Vector3();
-            xz.x = -camOrientation.z;
-            xz.z = camOrientation.x;
-            movementVec.plusEquals(xz.normalized().times(-1/60f));
-        }
+            movementVec.plusEquals(right.normalized().times(-1/60f)); }
 
         if (glfwGetKey(GraphicsSystem.window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-            movementVec.plusEquals(new Vector3(0,1/60f, 0));
-        }
+            movementVec.plusEquals(new Vector3(0,-1/60f, 0)); }
 
-        if (glfwGetKey(GraphicsSystem.window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
-            movementVec.plusEquals(new Vector3(0,-1/60f, 0));
-        }
+        if (glfwGetKey(GraphicsSystem.window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+            movementVec.plusEquals(new Vector3(0,1/60f, 0)); }
 
         camPosition.plusEquals(movementVec);
-        view = Matrix4x4.getView(camPosition, camOrientation);
+
+        Quaternion inverseCamYRot = new Quaternion(camYRotation.axis, -camYRotation.angle);
+        Quaternion inverseCamXRot = new Quaternion(camXRotation.axis, -camXRotation.angle);
+
+        view = (inverseCamXRot.rotationMatrix)
+                .times(inverseCamYRot.rotationMatrix)
+                .times(Matrix4x4.translation(camPosition.negative()));
     }
 
     public void exit() {

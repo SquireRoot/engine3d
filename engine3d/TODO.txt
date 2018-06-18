@@ -1,4 +1,2 @@
-add propper matrix math for viewport and rotations
-lighting
+Lighting
 assimp
-interesting stuff?
